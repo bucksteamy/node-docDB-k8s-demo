@@ -1,0 +1,28 @@
+  kind: Deployment
+  apiVersion: extensions/v1beta1
+  metadata:
+    name: nodeapp-deployment
+  spec: 
+    replicas: 3
+    template:
+      metadata:
+        labels:
+          app: todo-app
+      spec:
+        containers:
+          - name: todo-app
+            image: acrnje.azurecr.io/nodeapp-demo
+            ports:
+              - name: nodejs-port
+                containerPort: 3000
+            env:
+              - name: AUTH_KEY
+                valueFrom:
+                  secretKeyRef:
+                    name: documentdb-connections
+                    key: authKey
+              - name: HOST
+                valueFrom:
+                  secretKeyRef:
+                    name: documentdb-connections
+                    key: host
